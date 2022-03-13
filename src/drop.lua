@@ -1,23 +1,31 @@
----@diagnostic disable: undefined-global
-
-_G.Drops = 1 -- Drop amount
+--#region // Variables
+local GDVer = "0.0.1-Release"
 local Dropzone = game.Players.LocalPlayer.Character.Head.CFrame
 local VirtualUser = game:GetService("VirtualUser") -- Anti AFK
+--#endregion
 
+print("GhettoDropper loaded. Using version: " .. GDVer)
+
+--#region // AntiAFK
 game:GetService("Players").LocalPlayer.Idled:Connect(function()
     VirtualUser:CaptureController()
     VirtualUser:ClickButton2(Vector2.new())
 end)
+--#endregion
 
-function ProcessTerminate() -- Uneeded, it just kicks you when its done. 
+ --#region // ProcessTerminate()
+function ProcessTerminate()
     print("Process Complete! Terminating...")
     task.wait(5)
     game.Players.LocalPlayer:Kick("Terminated Drop Process.")
 end
+--#endregion
 
+--#region // Main Dropping Function.
 for i=1, _G.Drops do
     game:GetService("ReplicatedStorage").Event.Bank:FireServer("Drop", 100000, Dropzone)
     task.wait(20) -- Safe amount, too lazy to calculate the actual drop time limit. 
 end
+--#endregion
 
-ProcessTerminate()
+ProcessTerminate() -- This is uneeded but useful if your PC is on for a realllly long drop. 
