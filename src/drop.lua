@@ -6,6 +6,12 @@ local VirtualUser = game:GetService("VirtualUser") -- Anti AFK
 
 print("GhettoDropper loaded. Using version: " .. GDVer)
 
+--#region // Chat(msg, type) -- Useless but neat!
+function SendChat(msg, type)
+    game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(msg, type)
+end
+--#endregion
+
 --#region // AntiAFK
 game:GetService("Players").LocalPlayer.Idled:Connect(function()
     VirtualUser:CaptureController()
@@ -13,11 +19,17 @@ game:GetService("Players").LocalPlayer.Idled:Connect(function()
 end)
 --#endregion
 
- --#region // ProcessTerminate()
+--#region // ProcessTerminate()
 function ProcessTerminate()
     print("Process Complete! Terminating...")
     task.wait(5)
     game.Players.LocalPlayer:Kick("Terminated Drop Process.")
+end
+--#endregion
+
+--#region //  Sends Starting Chat
+if _G.SendChat == true then
+    SendChat("Starting the drop of " .. _G.Drops .. " drops!", "All")
 end
 --#endregion
 
@@ -28,4 +40,12 @@ for i=1, _G.Drops do
 end
 --#endregion
 
-ProcessTerminate() -- This is uneeded but useful if your PC is on for a realllly long drop. 
+--#region // Final
+if _G.SendChat == true then
+    SendChat("Finished " .. _G.Drops .. " drops! Leaving!", "All")
+end
+task.wait(5)
+if _G.TermProcess == true then
+    ProcessTerminate()
+end
+--#endregion
